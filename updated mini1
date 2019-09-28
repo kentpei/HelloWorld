@@ -10,10 +10,10 @@ import re
 
 
 #Twitter API credentials
-consumer_key = 'OPXVWM0pzdkiOWzvwZKwNjffb'
-consumer_secret = '0PlU0H4wLc6bh7Q0GAZN2ms3Tf6a6aQCTRkj7GybBWOoL4yyUH'
-access_key = '1171846283398537216-Bw08bbT7jg7HhjeiYu1YrWLUeeJp2F'
-access_secret = '3ynyTQPgsLL2KXqgKZ7VmZ0sZL408PNAClIrtHQiETtHh' 
+consumer_key = ''
+consumer_secret = ''
+access_key = ''
+access_secret = '' 
 
 
 def get_all_tweets():
