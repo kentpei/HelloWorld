@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+
+import tweepy #https://github.com/tweepy/tweepy
+import json
+import json
+import demjson
+import re
+
+
+#Twitter API credentials
+consumer_key = 'OPXVWM0pzdkiOWzvwZKwNjffb'
+consumer_secret = '0PlU0H4wLc6bh7Q0GAZN2ms3Tf6a6aQCTRkj7GybBWOoL4yyUH'
+access_key = '1171846283398537216-Bw08bbT7jg7HhjeiYu1YrWLUeeJp2F'
+access_secret = '3ynyTQPgsLL2KXqgKZ7VmZ0sZL408PNAClIrtHQiETtHh' 
+
+
+def get_all_tweets():
+    
+    #Twitter only allows access to a users most recent 3240 tweets with this method
+    
+    #authorize twitter, initialize tweepy
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_key, access_secret)
+    api = tweepy.API(auth)
+    
+    #initialize a list to hold all the tweepy Tweets
+    alltweets = []    
+    
+    #make initial request for most recent tweets (200 is the maximum allowed count)
+    new_tweets = api.user_timeline(screen_name = "ussconstitution",count=10)
+    for tweet in new_tweets:
+        alltweets = alltweets + [tweet.text]
+    return alltweets
+tweet1=get_all_tweets()
+print(tweet1)
+
+    #save most recent tweets
+    #alltweets.extend(new_tweets)
+'''
+    #save the id of the oldest tweet less one
+    oldest = alltweets[-1].id - 1
+    
+    #keep grabbing tweets until there are no tweets left to grab
+    while len(new_tweets) > 0:
+        
+        #all subsiquent requests use the max_id param to prevent duplicates
+        new_tweets = api.user_timeline(screen_name = "ussconstitution",count=10,max_id=oldest)
+        
+        #save most recent tweets
+        alltweets.extend(new_tweets)
+        
+        #update the id of the oldest tweet less one
+        oldest = alltweets[-1].id - 1
+        if(len(alltweets) > 15):
+            break
+        print ("...%s tweets downloaded so far" % (len(alltweets)))
+       
+    #write tweet objects to JSON
+    file = open('tweet.json', 'w') 
+    print ("Writing tweet objects to JSON please wait...")
+    for status in alltweets:
+        json.dump(status._json,file,sort_keys = True,indent = 4)
+    
+    #close the file
+    print ("Done")
+    file.close()
+
+if __name__ == '__main__':
+    #pass in the username of the account you want to download
+    get_all_tweets("ussconstitution")
+'''
+
+from google.cloud import language
+from google.cloud.language import enums
+from google.cloud.language import types
+#import testjson
+# Instantiates a client
+sentiment_score_list = []
+def get_score(text1):
+    for tweet in text1:
+        client = language.LanguageServiceClient()  
+        # The text to analyze
+        document = types.Document(
+            content=tweet,
+            type=enums.Document.Type.PLAIN_TEXT)
+
+        # Detects the sentiment of the text
+        sentiment_score_list.append(client.analyze_sentiment(document=document).document_sentiment.score)
+
+        #print('Text: {}'.format(tweet))   #debug
+        #print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))  #debug
+
+    #average_sentiment = mean(sentiment_score_list)
+
+    average_sentiment = sum(sentiment_score_list)/len(sentiment_score_list)
+    return average_sentiment
+print(score(tweet1))
