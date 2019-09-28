@@ -38,62 +38,41 @@ print(tweet1)
 
     #save most recent tweets
     #alltweets.extend(new_tweets)
-'''
-    #save the id of the oldest tweet less one
-    oldest = alltweets[-1].id - 1
-    
-    #keep grabbing tweets until there are no tweets left to grab
-    while len(new_tweets) > 0:
-        
-        #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = "ussconstitution",count=10,max_id=oldest)
-        
-        #save most recent tweets
-        alltweets.extend(new_tweets)
-        
-        #update the id of the oldest tweet less one
-        oldest = alltweets[-1].id - 1
-        if(len(alltweets) > 15):
-            break
-        print ("...%s tweets downloaded so far" % (len(alltweets)))
-       
-    #write tweet objects to JSON
-    file = open('tweet.json', 'w') 
-    print ("Writing tweet objects to JSON please wait...")
-    for status in alltweets:
-        json.dump(status._json,file,sort_keys = True,indent = 4)
-    
-    #close the file
-    print ("Done")
-    file.close()
-
-if __name__ == '__main__':
-    #pass in the username of the account you want to download
-    get_all_tweets("ussconstitution")
-'''
-
 from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 #import testjson
 # Instantiates a client
-sentiment_score_list = []
+sentiment_score = []
 def get_score(text1):
     for tweet in text1:
         client = language.LanguageServiceClient()  
         # The text to analyze
-        document = types.Document(
-            content=tweet,
-            type=enums.Document.Type.PLAIN_TEXT)
+        document = types.Document(content=tweet,type=enums.Document.Type.PLAIN_TEXT)
 
         # Detects the sentiment of the text
-        sentiment_score_list.append(client.analyze_sentiment(document=document).document_sentiment.score)
+        sentiment_score.append(client.analyze_sentiment(document=document).document_sentiment.score)
 
         #print('Text: {}'.format(tweet))   #debug
         #print('Sentiment: {}, {}'.format(sentiment.score, sentiment.magnitude))  #debug
 
     #average_sentiment = mean(sentiment_score_list)
 
-    average_sentiment = sum(sentiment_score_list)/len(sentiment_score_list)
-    return average_sentiment
-print(score(tweet1))
+    average_sentiment = sum(sentiment_score)/len(sentiment_score)
+    return [average_sentiment,sentiment_score]
+print(get_score(tweet1)[0])
+def is_satisfied():
+  x,y= 0,0
+  for score in get_score(tweet1)[1]:
+    if score > 0:
+        x = x + 1
+    elif score < 0:
+        y = y + 1
+  if x > y:
+    print("More of the posts about the attraction are positive")
+  elif x < y:
+    print("More of the posts about the attraction are negative")
+  else:
+    print("The posts are equally split between positve and negative")
+  return "done"
+print(is_satisfied())
