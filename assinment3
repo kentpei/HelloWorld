@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cstdint>
+#include <cfloat>
+#include <cmath>
+using namespace std;
+int main(){
+
+
+  double Rs,Ri,Rm;
+  double smallest,maximum_f,maximum_i,N;
+
+
+  // calculate Rs, Ri, and Rm for half/binary16 vs int16_t
+  smallest = pow(2,-14);
+  maximum_f = pow(2,15) * (2-pow(2,-10));
+  maximum_i = pow(2,16) - 1;
+  N = pow(2,11);
+  Rs = 1 / smallest;
+  Rm = double (maximum_f/maximum_i);
+  Ri = double (maximum_i/N);
+  cout<<pow(2,14)<<endl;
+  std::cout<< "16 : Ri= " << Ri << " Rm= " << Rm << " Rs= " << Rs << std::endl;
+
+  // calculate Rs, Ri, and Rm for float/single/binary32 vs int32_t
+  smallest = pow(2,-126);
+  maximum_f = pow(2,127) * (2-pow(2,-23));
+  maximum_i = pow(2,32) - 1;
+  N = pow(2,24);
+  Rs = 1 / smallest;
+  Rm = double (maximum_f/maximum_i);
+  Ri = double (maximum_i/N);
+
+  std::cout<< "32 : Ri= " << Ri << " Rm= " << Rm << " Rs= " << Rs << std::endl;
+
+  // calculate Rs, Ri, and Rm for double/binary64 vs int64_t
+  smallest = pow(2,-1022);
+  maximum_f = pow(2,1023) * (2-pow(2,-52));
+  maximum_i = pow(2,64) - 1;
+  N = pow(2,53);
+  Rs = 1 / smallest;
+  Rm = double (maximum_f/maximum_i);
+  Ri = double (maximum_i/N);
+
+  std::cout<< "64 : Ri= " << Ri << " Rm= " << Rm << " Rs= " << Rs << std::endl;
+  
+  return 0;
+}
