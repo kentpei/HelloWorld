@@ -66,10 +66,36 @@ Poly multiply_poly(const Poly &a,const Poly &b) {
     return m;
     /*
 
-
+    
     for (int i = 0; i < len1 + len2 - 1; i++) {
         m.pop_back();
         return m;
     }
        */
+}
+int main()
+{ 
+
+  int Alen,Blen;
+
+  cin >> Alen >> Blen;
+
+  Poly A(Alen,0),B(Blen,0);
+
+  for (auto& e : A)
+     cin >> e;
+  
+  for (auto& e : B)
+     cin >> e;
+
+  for (auto e : add_poly(A,B))
+     cout << e << " ";
+  cout << endl;
+
+
+  for (auto e : multiply_poly(A,B))
+     cout << e << " ";
+  cout << endl;  
+
+
 }
